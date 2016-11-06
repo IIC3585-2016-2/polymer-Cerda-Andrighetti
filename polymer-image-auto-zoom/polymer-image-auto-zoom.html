@@ -1,0 +1,131 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`polymer-image-auto-zoom`
+Displays an image and auto-zooms it on hover
+Based on http://w9p.co/userscripts/mpiv/
+
+@demo demo/index.html
+-->
+
+<dom-module id="polymer-image-auto-zoom">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #popup {
+        display: none;
+        border: 1px solid gray;
+        box-sizing: content-box;
+        position: fixed;
+        z-index: 2147483647;
+        margin: 0;
+        max-width: none;
+        max-height: none;
+      }
+    </style>
+
+    <img
+      id="theImage"
+      src=[[src]]
+      on-mouseenter="onMouseEnter"
+      on-mouseleave="onMouseLeave"
+    />
+
+    <img
+      id="popup"
+      src=[[src]]
+    />
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'polymer-image-auto-zoom',
+
+      properties: {
+        src: {
+          type: String,
+        },
+        width: {
+          type: Number,
+        },
+        size: {
+          type: Number,
+          value: 50,
+        },
+        delay: {
+          type: Number,
+          value: 500,
+        },
+      },
+
+      onMouseEnter: function(e) {
+        this.popupTimerId = setTimeout(this.showPopup.bind(this), this.delay);
+      },
+
+      onMouseLeave: function(e) {
+        clearTimeout(this.popupTimerId);
+        this.$.popup.style.display = 'none';
+      },
+
+      showPopup: function(element) {
+        const viewport = this.viewport();
+        if (this.originalWidth > viewport.width || this.originalHeight > viewport.height) {
+          // image larger than window
+          const ratioX = this.originalWidth / viewport.width;
+          const ratioY = this.originalHeight / viewport.height;
+
+          if (ratioX > ratioY) {
+            // hits horizontal border
+            this.$.popup.style.left = 0;
+            const height = this.originalHeight / ratioX;
+            this.$.popup.style.top = (viewport.height - height) / 2 + 'px';
+
+            this.$.popup.style.width = '';
+            this.$.popup.style.height = height + 'px';
+          } else {
+            // hits vertical border
+            this.$.popup.style.top = 0;
+            const width = this.originalWidth / ratioY;
+            this.$.popup.style.left = (viewport.width - width) / 2 + 'px';
+
+            this.$.popup.style.width = width + 'px';
+            this.$.popup.style.height = '';
+          }
+        } else {
+          // image fits in window
+          this.$.popup.style.left = (viewport.width - this.originalWidth) / 2 + 'px';
+          this.$.popup.style.top = (viewport.height - this.originalHeight) / 2 + 'px';
+        }
+
+        this.$.popup.style.display = 'inline';
+      },
+
+      ready: function() {
+        this.originalWidth = this.$.theImage.width;
+        this.originalHeight = this.$.theImage.height;
+
+        // set displayed image size
+        if (this.width) {
+          this.$.theImage.width = this.width;
+        } else {
+          this.$.theImage.width *= this.size / 100;
+        }
+      },
+
+
+      // https://andylangton.co.uk/blog/development/get-viewportwindow-size-width-and-height-javascript
+      viewport: function() {
+        const e = window, a = 'inner';
+        if (!('innerWidth' in window )) {
+          a = 'client';
+          e = document.documentElement || document.body;
+        }
+        return { width : e[a + 'Width'] , height : e[a + 'Height'] };
+      }
+    });
+  </script>
+</dom-module>
