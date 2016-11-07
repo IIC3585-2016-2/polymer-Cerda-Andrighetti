@@ -17,7 +17,7 @@ Replace `<img>` tags with `<polymer-image-auto-zoom>` tags:
 ## Demo
 
 - Run `polymer serve`
-- Open http://localhost:8080/components/polymer-image-auto-zoom/demo/no-polymer.html, click on the images
+- Open <http://localhost:8080/components/polymer-image-auto-zoom/demo/no-polymer.html>, click on the images
 - Click the link at the bottom of the page, hover the mouse pointer over the images
 
 --------------------------------------------
