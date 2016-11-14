@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+
+
+<dom-module id="one-bug">
+
+
+  <template>
+
+    <style>
+      :host {
+        display: inline-block;
+      }
+      iron-icon {
+        fill: lightgray;
+        stroke: var(--icon-toggle-outline-color, currentcolor);
+      }
+      :host([pressed]) iron-icon {
+        fill: var(--icon-toggle-pressed-color, currentcolor);
+      }
+    </style>
+
+    <!-- local DOM goes here -->
+    <iron-icon id="bug-icon" hidden$="[[hideIcon]]" icon="[[toggleIcon]]">
+    </iron-icon>
+
+    <paper-spinner active hidden$="[[hideSpinner]]">
+    </paper-spinner>
+
+  </template>
+
+  <script>
+  Polymer({
+    is: 'one-bug',
+    properties: {
+      pressed: {
+        type: Boolean,
+        notify: true,
+        reflectToAttribute: true,
+        value: false
+      },
+      toggleIcon: {
+        type: String,
+        notify: true,
+        reflectToAttribute: true,
+        value: "bug-report"
+      },
+      hideIcon: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
+      },
+      hideSpinner: {
+        type: Boolean,
+        value: true,
+        notify: true,
+        reflectToAttribute: true
+      },
+    },
+    listeners: {
+      "tap": "press_button",
+    },
+    press_button: function() {
+      if(this.pressed)
+        return;
+
+      this.hideIcon = true;
+      this.hideSpinner = false;
+
+
+      colour = '';
+      if(Math.random() < 0.65){
+        this.customStyle['--icon-toggle-pressed-color'] = 'green';
+        this.toggleIcon = 'star';
+        colour = 'green';
+      }
+      else{
+        this.customStyle['--icon-toggle-pressed-color'] = 'red';
+        this.toggleIcon = 'error'
+        color = 'red';
+      }
+
+      Polymer.updateStyles();
+      this.fire('clickedOnBug', {colour: colour});
+      this.pressed = true;
+
+      const f = function(){
+        console.log("asd")
+        this.hideIcon = false;
+        this.hideSpinner = true;
+      };
+
+      setTimeout(f.bind(this), (Math.random()*2+1)*1000);
+
+    },
+  });
+  </script>
+
+</dom-module>

@@ -1,0 +1,138 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../simple-component/one-bug.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+
+
+
+
+<dom-module id="the-bug-game">
+  <template>
+
+    <style>
+      :host {
+        display: inline-block;
+      }
+      iron-icon {
+        fill: var(--icon-toggle-color, rgba(0,0,0,0));
+        stroke: var(--icon-toggle-outline-color, currentcolor);
+      }
+      :host([pressed]) iron-icon {
+        fill: var(--icon-toggle-pressed-color, currentcolor);
+      }
+    </style>
+
+    <!-- local DOM goes here -->
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+    .tg .tg-yw4l{vertical-align:top}
+    </style>
+
+
+    <table class="tg">
+      <tr>
+        <th class="tg-yw4l">  <one-bug/> </th>
+        <th class="tg-yw4l">  <one-bug/> </th>
+        <th class="tg-yw4l">  <one-bug/> </th>
+        <th class="tg-yw4l">  <one-bug/> </th>
+        <th class="tg-yw4l">  <one-bug/> </th>
+        <th class="tg-yw4l">  <one-bug/> </th>
+      </tr>
+      <tr>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+      </tr>
+      <tr>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+      </tr>
+      <tr>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+      </tr>
+      <tr>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+        <td class="tg-yw4l"> <one-bug> </td>
+      </tr>
+    </table>
+
+    <br>
+
+    <h2>Premio: [[score]] !!!</h2>
+    <h2>Bugchacales: [[chacales]]</h2>
+    <br>
+    <br>
+    <h1>[[mfinal]]</h1>
+
+  </template>
+
+  <script>
+  Polymer({
+    is: 'the-bug-game',
+    properties: {
+      score: {
+              type: Number,
+              notify: true,
+              reflectToAttribute: true,
+              value: 0
+            },
+      chacales: {
+              type: String,
+              notify: true,
+              reflectToAttribute: true,
+              value: ""
+            },
+      nchacales: {
+              type: Number,
+              notify: true,
+              reflectToAttribute: true,
+              value: 0
+            },
+      mfinal: {
+              type: String,
+              notify: true,
+              reflectToAttribute: true,
+              value: ""
+            },
+
+    },
+    ready: function() {
+      this.addEventListener('clickedOnBug', this.bugClick);
+
+    },
+    bugClick: function(event) {
+      if(event.detail.colour == "green"){
+        this.score++;
+      }
+      else{
+        this.chacales += " X";
+        this.nchacales++;
+        if(this.nchacales == 3){
+          this.mfinal = "Fin del juego, tu premio es de " + this.score + "(millones)"
+          this.removeEventListener('clickedOnBug', this.bugClick);
+
+        }
+      }
+    }
+  });
+  </script>
+
+</dom-module>
